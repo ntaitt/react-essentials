@@ -5,14 +5,14 @@ export const StyledNavbar = styled.nav`
    display: grid;
    grid-template-columns: 1fr auto;
    padding: 20px;
-`
+`;
 
 export const StyledNavBrand = styled.div`
    font-size: 1.4rem;
    & > a {
        text-decoration: none;
    }
-`
+`;
 
 export const StyledNavItems = styled.ul`
     list-style: none;
@@ -20,7 +20,8 @@ export const StyledNavItems = styled.ul`
     display: grid;
     grid-auto-flow: column;
     grid-gap: 20px;
-`
+`;
+
 export const StyledLink = styled(Link)`
    text-decoration: none;
    font-size: 1.2rem;
@@ -28,4 +29,4 @@ export const StyledLink = styled(Link)`
    &:hover{
        color: #e16365;
    }
-`
+`;
