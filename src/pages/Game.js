@@ -4,7 +4,7 @@ import { Strong } from "../styled/Random";
 
 export default function Game({ history }) {
     const [score, setScore] = useState(1);
-    const MAX_SECONDS = 5;
+    const MAX_SECONDS = 90;
     const [ms, setMs] = useState(0);
     const [seconds, setSeconds] = useState(MAX_SECONDS);
 
@@ -48,6 +48,17 @@ export default function Game({ history }) {
             history.push('/gameOver');
         }
     }, [seconds, ms, history]);
+
+    useEffect(() => {
+        document.addEventListener('keyup', keyUpHandler);
+        return () => {
+            document.removeEventListener('keyup', keyUpHandler);
+        };
+    }, []);
+
+    const keyUpHandler = (event) => {
+        console.log(event.key);
+    };
 
     return (
         <StyledGame>
