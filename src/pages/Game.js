@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { waitForElementToBeRemoved } from "@testing-library/react";
+import React, { useState, useEffect, useCallback } from "react";
 import { StyledGame, StyledScore, StyledTimer, StyledCharacter } from "../styled/Game";
 import { Strong } from "../styled/Random";
 
 export default function Game({ history }) {
-    const [score, setScore] = useState(1);
+    const [score, setScore] = useState(0);
     const MAX_SECONDS = 90;
+    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    const [currentCharacter, setCurrentCharacter] = useState('');
     const [ms, setMs] = useState(0);
     const [seconds, setSeconds] = useState(MAX_SECONDS);
 
@@ -18,6 +21,7 @@ export default function Game({ history }) {
     }, [score]); */
 
     useEffect(() => {
+        setRandomCharacter();
         const currentTime = new Date();
         const interval = setInterval(() => updateTime(currentTime), 1);
         return () => clearInterval(interval);
@@ -45,25 +49,40 @@ export default function Game({ history }) {
 
     useEffect(() => {
         if (seconds <= -1) {
+            //Todo: save the score
             history.push('/gameOver');
         }
     }, [seconds, ms, history]);
+
+    const keyUpHandler = useCallback((event) => {
+        console.log(event.key);
+        if (event.key === currentCharacter) {
+            setScore((prevScore) => prevScore + 1);
+        }
+        else {
+            if (score > 0) {
+                setScore((prevScore) => prevScore - 1);
+            }
+        }
+        setRandomCharacter();
+    }, [currentCharacter]);
 
     useEffect(() => {
         document.addEventListener('keyup', keyUpHandler);
         return () => {
             document.removeEventListener('keyup', keyUpHandler);
-        };
-    }, []);
+        }
+    }, [keyUpHandler]);
 
-    const keyUpHandler = (event) => {
-        console.log(event.key);
-    };
+    const setRandomCharacter = () => {
+        const randomInt = Math.floor(Math.random() * 36);
+        setCurrentCharacter(characters[randomInt]);
+    }
 
     return (
         <StyledGame>
             <StyledScore>Score: <Strong>{score}</Strong></StyledScore>
-            <StyledCharacter>A</StyledCharacter>
+            <StyledCharacter>{currentCharacter}</StyledCharacter>
             <StyledTimer>Time: <Strong>{seconds}.{ms}</Strong></StyledTimer>
         </StyledGame>
     )
