@@ -1,11 +1,12 @@
 import { waitForElementToBeRemoved } from "@testing-library/react";
 import React, { useState, useEffect, useCallback } from "react";
+import { useScore } from "../contexts/ScoreContext";
 import { StyledGame, StyledScore, StyledTimer, StyledCharacter } from "../styled/Game";
 import { Strong } from "../styled/Random";
 
 export default function Game({ history }) {
-    const [score, setScore] = useState(0);
-    const MAX_SECONDS = 90;
+    const [score, setScore] = useScore();
+    const MAX_SECONDS = 15;
     const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
     const [currentCharacter, setCurrentCharacter] = useState('');
     const [ms, setMs] = useState(0);
@@ -22,6 +23,7 @@ export default function Game({ history }) {
 
     useEffect(() => {
         setRandomCharacter();
+        setScore(0);
         const currentTime = new Date();
         const interval = setInterval(() => updateTime(currentTime), 1);
         return () => clearInterval(interval);
